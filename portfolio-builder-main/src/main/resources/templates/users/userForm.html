@@ -1,0 +1,12 @@
+{{> /include/header }}
+<form class="ui form" action="{{action}}" method="post">
+    {{#user}}
+    <input name="login" value="{{login}}" placeholder="Entrez un Login" class="ui input"/>
+    <input name="firstName" value="{{firstName}}" placeholder="Entrez un prénom" class="ui input"/>
+    <input name="lastName" value="{{lastName}}" placeholder="Entrez un Nom" class="ui input"/>
+    {{/user}}
+    <div class="ui divider"></div>
+    <button type="submit" class="ui green button">Valider</button>
+</form>
+
+{{> /include/footer }}

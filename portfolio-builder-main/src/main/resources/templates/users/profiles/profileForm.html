@@ -1,0 +1,19 @@
+{{> /include/header }}
+
+<h1 class="ui header">
+    <a href="/users/{{userId}}/profiles" class="ui basic icon button"><i class="left arrow icon"></i></a>
+    Modifier le profil : {{profile.name}}
+</h1>
+
+<form class="ui form" action="{{action}}" method="post">
+    <div class="field">
+        <label for="profileName">Nom du profil</label>
+        <input type="text" id="profileName" name="name" placeholder="Nom du profil" value="{{profile.name}}" required>
+    </div>
+    <button class="ui primary button" type="submit">
+        Enregistrer les modifications
+    </button>
+    <a href="/users/{{userId}}/profiles" class="ui basic button">Annuler</a>
+</form>
+
+{{> /include/footer }}

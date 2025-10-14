@@ -1,0 +1,361 @@
+<!-- src/main/resources/templates/users/viewProfiles.html -->
+{{> /include/header }}
+
+<div class="ui fluid container main-content">
+    <div class="ui clearing segment top-bar">
+        <h1 class="ui huge header floated left">
+            <a href="/users" class="ui icon button primary inverted circular back-button" data-tooltip="Retour aux utilisateurs" data-position="right center">
+                <i class="left arrow icon"></i>
+            </a>
+            <span class="page-title">Profils utilisateur: <span class="ui text teal">{{user.firstName}} {{user.lastName}}</span> ({{user.login}})</span>
+        </h1>
+        <button id="addProfileButton" class="ui right floated primary button add-profile-button" data-tooltip="Ajouter un nouveau profil" data-position="left center">
+            <i class="plus icon"></i> Ajouter un profil
+        </button>
+    </div>
+
+    <div class="ui grid stackable profile-management-grid">
+        <!-- Colonne principale pour la liste des profils -->
+        <div class="eleven wide column profile-list-section">
+            <h2 class="ui dividing header section-header">
+                <i class="id card outline icon"></i> Liste des profils
+            </h2>
+
+            {{#user.profiles.size}}
+            <div class="ui three doubling cards profile-cards-container">
+                {{#user.profiles}}
+                <div class="card profile-card" data-profile-id="{{id}}" data-profile-name="{{name}}">
+                    <div class="content">
+                        <div class="header profile-name">{{name}}</div>
+                        <div class="meta profile-meta">ID: {{id}}</div>
+                    </div>
+                    <div class="extra content profile-actions">
+                        <div class="ui two buttons">
+                            <button class="ui basic green button edit-profile-btn" data-tooltip="Modifier ce profil">
+                                <i class="edit icon"></i> Modifier
+                            </button>
+                            <button class="ui basic red button delete-profile-btn" data-tooltip="Supprimer ce profil">
+                                <i class="trash alternate icon"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {{/user.profiles}}
+            </div>
+            {{/user.profiles.size}}
+            {{^user.profiles.size}}
+            <div class="ui placeholder segment no-profiles-placeholder">
+                <div class="ui icon header">
+                    <i class="address book outline icon"></i>
+                    Aucun profil n'est associé à cet utilisateur pour le moment.
+                </div>
+                <p>Cliquez sur "Ajouter un profil" pour commencer.</p>
+                <div class="ui primary button" id="triggerAddProfileForm">
+                    <i class="plus icon"></i> Ajouter un premier profil
+                </div>
+            </div>
+            {{/user.profiles.size}}
+        </div>
+
+        <!-- Colonne pour le formulaire d'ajout/édition de profil (initialement caché) -->
+        <div class="five wide column profile-form-section" id="profileFormContainer" style="display: none;">
+            <h2 class="ui dividing header section-header">
+                <i class="plus circle icon"></i> <span id="formTitle">Ajouter un profil</span>
+                <i class="close icon floated right close-form-btn" style="cursor: pointer;"></i>
+            </h2>
+            <form class="ui form segment profile-form" id="profileForm" action="/users/{{user.id}}/profiles/add" method="post">
+                <input type="hidden" name="profileId" id="profileIdField">
+                <div class="field">
+                    <label for="profileName"><i class="tag icon"></i> Nom du profil</label>
+                    <input type="text" id="profileName" name="name" placeholder="Ex: Administrateur, Editeur" required minlength="3" maxlength="50">
+                </div>
+                <div class="field">
+                    <label for="profileDescription"><i class="file alternate outline icon"></i> Description (optionnel)</label>
+                    <textarea id="profileDescription" name="description" rows="3" placeholder="Décrivez le rôle ou les permissions (max 200 caractères)"></textarea>
+                </div>
+                <button class="ui primary button fluid submit-profile-btn" type="submit">
+                    <i class="save icon"></i> <span id="submitButtonText">Enregistrer le profil</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{#message}}
+<div id="msg" class="ui icon message {{className}} animated fadeIn toast fixed bottom right">
+    <i class="{{icon}} icon"></i>
+    <div class="content">
+        <div class="header">{{title}}</div>
+        <p>{{content}}</p>
+    </div>
+    <i class="close icon"></i>
+</div>
+{{/message}}
+
+{{> /include/footer }}
+
+<style>
+    body {
+        background-color: #f0f2f5; /* Light grey background for a modern feel */
+    }
+    .main-content {
+        padding: 30px 40px !important; /* More generous padding */
+    }
+    .top-bar {
+        background: #ffffff;
+        padding: 25px !important;
+        margin-bottom: 30px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .top-bar .page-title {
+        margin-left: 15px; /* Spacing for back button */
+    }
+    .back-button {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .add-profile-button {
+        font-size: 1.1em !important;
+        padding: 12px 25px !important;
+        border-radius: 25px !important; /* Pill shape */
+        transition: all 0.3s ease;
+    }
+    .add-profile-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .profile-management-grid {
+        margin-top: 20px !important;
+    }
+    .section-header {
+        margin-bottom: 25px !important;
+        padding-bottom: 15px !important;
+        border-color: #e0e0e0 !important;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .profile-cards-container {
+        margin-top: 20px;
+    }
+    .profile-card {
+        border-radius: 10px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+    .profile-card .header {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #333;
+    }
+    .profile-card .meta {
+        color: #777;
+        font-size: 0.9em;
+    }
+    .profile-actions {
+        border-top: 1px solid rgba(0,0,0,0.05) !important;
+        padding-top: 15px !important;
+    }
+    .profile-actions .button {
+        border-radius: 5px !important;
+        font-weight: 600;
+    }
+
+    .no-profiles-placeholder {
+        padding: 40px !important;
+        border-radius: 10px !important;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+    .no-profiles-placeholder .header {
+        color: #555;
+        font-size: 1.4em;
+    }
+    .no-profiles-placeholder p {
+        color: #777;
+        font-size: 1.1em;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .no-profiles-placeholder .button {
+        border-radius: 20px;
+        padding: 12px 25px;
+    }
+
+    .profile-form-section {
+        background: #ffffff;
+        padding: 30px !important;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease; /* Smooth transition for showing/hiding */
+        position: sticky; /* Keeps it in view when scrolling if content is long */
+        top: 30px; /* Adjust as needed */
+        align-self: flex-start; /* Prevents it from stretching the full height */
+    }
+    .profile-form .field label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+    }
+    .profile-form input[type="text"],
+    .profile-form textarea {
+        border-radius: 5px !important;
+        border: 1px solid #ddd !important;
+        padding: 12px !important;
+        transition: border-color 0.2s ease;
+    }
+    .profile-form input[type="text"]:focus,
+    .profile-form textarea:focus {
+        border-color: #2185d0 !important; /* Primary color on focus */
+    }
+    .submit-profile-btn {
+        margin-top: 25px !important;
+        border-radius: 5px !important;
+        font-size: 1.1em !important;
+        padding: 12px 25px !important;
+    }
+    .close-form-btn {
+        font-size: 1.2em;
+        color: #999;
+        transition: color 0.2s ease;
+    }
+    .close-form-btn:hover {
+        color: #333;
+    }
+
+    /* Toast message enhancements */
+    .toast.message {
+        animation-duration: 0.5s !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        max-width: 350px;
+        border-radius: 8px !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // Initialize tooltips
+        $('.ui.button').popup();
+        $('.back-button').popup();
+        $('#addProfileButton').popup();
+
+        const profileFormContainer = $('#profileFormContainer');
+        const profileForm = $('#profileForm');
+        const formTitle = $('#formTitle');
+        const submitButtonText = $('#submitButtonText');
+        const profileIdField = $('#profileIdField');
+        const profileNameInput = $('#profileName');
+        const profileDescriptionInput = $('#profileDescription');
+
+        // Function to show the add/edit profile form
+        function showProfileForm(isEdit = false, profileData = {}) {
+            profileFormContainer.fadeIn(300); // Fade in the form
+            $('html, body').animate({
+                scrollTop: profileFormContainer.offset().top - 50 // Scroll to the form
+            }, 500);
+
+            if (isEdit) {
+                formTitle.text('Modifier le profil');
+                submitButtonText.text('Enregistrer les modifications');
+                profileForm.attr('action', `/users/{{user.id}}/profiles/edit/${profileData.id}`);
+                profileIdField.val(profileData.id);
+                profileNameInput.val(profileData.name);
+                // Assume profileData might have a description field, add if necessary
+                // profileDescriptionInput.val(profileData.description || '');
+            } else {
+                formTitle.text('Ajouter un profil');
+                submitButtonText.text('Ajouter le profil');
+                profileForm.attr('action', `/users/{{user.id}}/profiles/add`);
+                profileIdField.val('');
+                profileNameInput.val('');
+                profileDescriptionInput.val('');
+            }
+        }
+
+        // Click handler for "Add Profile" button in top bar
+        $('#addProfileButton, #triggerAddProfileForm').on('click', function() {
+            showProfileForm(false);
+        });
+
+        // Click handler for "Edit" buttons on profile cards
+        $('.edit-profile-btn').on('click', function() {
+            const card = $(this).closest('.profile-card');
+            const profileData = {
+                id: card.data('profile-id'),
+                name: card.data('profile-name')
+                // Fetch description if available in your model or via AJAX
+            };
+            showProfileForm(true, profileData);
+        });
+
+        // Click handler for closing the form
+        $('.close-form-btn').on('click', function() {
+            profileFormContainer.fadeOut(300); // Fade out the form
+        });
+
+        // Click handler for "Delete" buttons on profile cards
+        $('.delete-profile-btn').on('click', function() {
+            const card = $(this).closest('.profile-card');
+            const profileId = card.data('profile-id');
+            const profileName = card.data('profile-name');
+
+            $('body')
+                .toast({
+                    class: 'red',
+                    message: `Voulez-vous vraiment supprimer le profil '${profileName}' ?`,
+                    displayTime: 0, // Keep open until action
+                    closeIcon: true,
+                    actions: [
+                        {
+                            text: 'Oui, supprimer',
+                            icon: 'trash',
+                            class: 'red button',
+                            click: function() {
+                                window.location.href = `/users/{{user.id}}/profiles/delete/${profileId}`;
+                            }
+                        },
+                        {
+                            text: 'Annuler',
+                            class: 'basic button'
+                        }
+                    ]
+                })
+            ;
+        });
+
+        // Toast message initialization (for the #msg element)
+        {{#message}}
+        $(document).ready(function() {
+            const messageToast = $('#msg');
+            messageToast.transition('pulse'); // Add a subtle animation when the message appears
+
+            // Automatically hide after some time, but allow manual close
+            setTimeout(function() {
+                if (messageToast.is(':visible')) {
+                    messageToast.transition('fade');
+                }
+            }, 5000); // Hide after 5 seconds
+
+            $('.message .close')
+                .on('click', function() {
+                    $(this)
+                        .closest('.message')
+                        .transition('fade')
+                    ;
+                })
+            ;
+        });
+        {{/message}}
+        });
+</script>

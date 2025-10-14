@@ -1,0 +1,130 @@
+{{> /include/header }}
+
+{{#users.size}}
+<h1 class="ui header">Utilisateurs</h1>
+<div class="ui menu">
+    <div class="item">
+        <a href="/users/add" class="ui orange button">Ajouter...</a>
+    </div>
+    <div class="item">
+        <form action="/users/search" method="post">
+            <div class="ui icon input">
+                <input name="searchText" type="text" placeholder="Filtrer...">
+                <i class="search icon"></i>
+            </div>
+        </form>
+    </div>
+</div>
+{{/users.size}}
+<div class="ui middle aligned divided list">
+    {{#users}}
+    <div class="item">
+        <div class="right floated content">
+            <a href="/users/edit/{{id}}"
+               class="ui green mini circular icon button"
+               title="Modifier"
+            >
+                <i class="ui edit icon"></i>
+            </a>
+            <!-- NOUVEAU : Bouton pour voir les profils de l'utilisateur -->
+            <a href="/users/{{id}}/profiles"
+               class="ui blue mini circular icon button"
+               title="Voir les profils"
+            >
+                <i class="ui eye icon"></i>
+            </a>
+            <!-- Le bouton de suppression avec la modale Semantic UI (inchangé) -->
+            <button class="ui red circular mini icon button delete-user-button"
+                    title="Supprimer"
+                    data-user-id="{{id}}"
+                    data-user-login="{{login}}"
+                    data-user-fullname="{{firstName}} {{lastName}}"
+                    data-profiles-count="{{profiles.size}}"
+            >
+                <i class="ui remove icon"></i>
+            </button>
+        </div>
+        <div class="middle aligned content">
+            <img class="ui avatar image" src="https://fomantic-ui.com/images/wireframe/square-image.png">
+            {{firstName}} {{lastName}}
+            <div class="description">{{profiles.size}} profil(s) associé(s)</div>
+        </div>
+    </div>
+    {{/users}}
+    {{#user}}
+    {{login}}
+    {{/user}}
+</div>
+<div class="ui small modal" id="deleteConfirmModal">
+    <i class="close icon"></i>
+    <div class="header">
+        Supprimer un utilisateur
+    </div>
+    <div class="content">
+        <div class="ui icon header">
+            <i class="trash alternate outline icon"></i>
+            <span id="modalMessage">
+                Êtes-vous sûr de vouloir supprimer l'utilisateur <strong id="modalUserName"></strong>
+                (<strong id="modalUserLogin"></strong>) et ses <strong id="modalProfilesCount"></strong> profil(s) associé(s) ?
+            </span>
+        </div>
+        <p>Cette action est irréversible.</p>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Annuler
+        </div>
+        <a class="ui negative right labeled icon button" id="confirmDeleteButton">
+            Supprimer
+            <i class="trash icon"></i>
+        </a>
+    </div>
+</div>
+
+{{#message}}
+<div id="msg" class="ui icon {{className}} message toast">
+    <i class="{{icon}} icon"></i>
+    <div class="content">
+        <div class="header">
+            {{title}}
+        </div>
+        <p>{{content}}</p>
+    </div>
+</div>
+<script>
+    $('#msg').toast({showProgress: "bottom"});
+    $('#msg').hide();
+</script>
+{{/message}}
+
+<script>
+    $(document).ready(function() {
+        $('#deleteConfirmModal').modal({
+            closable: true,
+            observeChanges: true
+        });
+
+
+        $('.delete-user-button').on('click', function() {
+            var userId = $(this).data('user-id');
+            var userLogin = $(this).data('user-login');
+            var userName = $(this).data('user-fullname');
+            var profilesCount = $(this).data('profiles-count');
+
+
+            $('#modalUserName').text(userName);
+            $('#modalUserLogin').text(userLogin);
+            $('#modalProfilesCount').text(profilesCount);
+
+
+            var deleteUrl = '/users/delete/' + userId;
+            $('#confirmDeleteButton').attr('href', deleteUrl);
+
+
+            $('#deleteConfirmModal').modal('show');
+        });
+
+    });
+</script>
+
+{{> /include/footer }}
