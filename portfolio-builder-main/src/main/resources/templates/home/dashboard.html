@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Editor - Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+        }
+
+        .menu-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #a0aec0;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            gap: 0.875rem;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+            border-left: 3px solid #667eea;
+        }
+
+        .menu-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .publish-btn {
+            margin: 1.5rem 1.5rem 0;
+            padding: 0.875rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .publish-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-subtitle {
+            color: #667eea;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            color: #718096;
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .hero-nav-item {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: #4a5568;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .hero-nav-item.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .hero-nav-item:hover {
+            color: #667eea;
+        }
+
+        .hero-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Projects Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-icon {
+            font-size: 4rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-description {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            padding: 0.25rem 0.625rem;
+            background: #edf2f7;
+            color: #4a5568;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .project-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f7fafc;
+            color: #4a5568;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .project-action-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            background: white;
+            border-radius: 12px;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-description {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state-btn {
+            padding: 0.875rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .empty-state-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .theme-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .theme-option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-image {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div class="user-name">Jane Doe</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="/" class="menu-item">
+                <i class="home icon"></i>
+                Dashboard
+            </a>
+            <a href="/dashboard" class="menu-item">
+                <i class="chart line icon"></i>
+                Dashboard
+            </a>
+            <a href="#" class="menu-item active">
+                <i class="folder open icon"></i>
+                My Portfolio
+            </a>
+            <a href="#" class="menu-item">
+                <i class="user icon"></i>
+                Personal Info
+            </a>
+            <a href="/users" class="menu-item">
+                <i class="edit icon"></i>
+                Edit Portfolio
+            </a>
+            <a href="#" class="menu-item">
+                <i class="briefcase icon"></i>
+                Experience
+            </a>
+
+            <div class="menu-section-title">DESIGN</div>
+            <a href="#" class="menu-item" onclick="openThemesModal(); return false;">
+                <i class="paint brush icon"></i>
+                Themes
+            </a>
+            <a href="#" class="menu-item">
+                <i class="font icon"></i>
+                Fonts
+            </a>
+            <a href="#" class="menu-item">
+                <i class="palette icon"></i>
+                Colors
+            </a>
+        </nav>
+
+        <button class="publish-btn">
+            <i class="cloud upload icon"></i>
+            Publish
+        </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-subtitle">Jane Doe</div>
+                <h1 class="hero-title">Innovative Digital<br>Experiences</h1>
+                <p class="hero-description">UI/UX Designer & Frontend Developer</p>
+
+                <div class="hero-nav">
+                    <button class="hero-nav-item active">Home</button>
+                    <button class="hero-nav-item">About</button>
+                    <button class="hero-nav-item">Projects</button>
+                    <button class="hero-nav-item">Contact</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop" alt="Profile">
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section-header">
+            <h2 class="section-title">My Projects</h2>
+            <div class="section-actions">
+                <button class="action-btn">
+                    <i class="edit icon"></i>
+                    Edit
+                </button>
+                <button class="action-btn">
+                    <i class="copy icon"></i>
+                    Duplicate
+                </button>
+                <button class="action-btn">
+                    <i class="trash icon"></i>
+                </button>
+                <button class="action-btn">
+                    <i class="arrows alternate icon"></i>
+                    Rearrange
+                </button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+            <!-- Project Card 1 -->
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="project-icon bullseye icon"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Project Bloom</h3>
+                    <p class="project-description">Praesent eius nonummy maiestatis delectus eostineque costraeos.</p>
+                    <div class="project-footer">
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Figma</span>
+                            <span class="project-tag">TypeScript</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="project-icon mobile alternate icon"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">TaskMaster Pro</h3>
+                    <p class="project-description">Praesent eius ronummy magistratis nedi essent possuere.</p>
+                    <div class="project-footer">
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Figma</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="project-icon chart line icon"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Analytics Dashboard</h3>
+                    <p class="project-description">Agospine tol ad simillo saprofee deneti corsaots.</p>
+                    <div class="project-footer">
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Figma</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Card 4 -->
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="project-icon shopping bag icon"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Crepmi Pro</h3>
+                    <p class="project-description">Pedoti praslac os vostino consaron.</p>
+                    <div class="project-footer">
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Themes Modal -->
+<div class="modal-overlay" id="themesModal" onclick="closeThemesModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3 class="modal-header">Themes</h3>
+        <div class="themes-grid">
+            <div class="theme-option">
+                <div class="theme-preview" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                <div>Modern</div>
+            </div>
+            <div class="theme-option">
+                <div class="theme-preview" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                <div>Creative</div>
+            </div>
+            <div class="theme-option">
+                <div class="theme-preview" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                <div>Professional</div>
+            </div>
+            <div class="theme-option">
+                <div class="theme-preview" style="background: linear-gradient(135deg, #43e97b, #38f9d7);"></div>
+                <div>Minimal</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.js"></script>
+<script>
+    function openThemesModal() {
+        document.getElementById('themesModal').classList.add('active');
+    }
+
+    function closeThemesModal(event) {
+        if (event.target === document.getElementById('themesModal')) {
+            document.getElementById('themesModal').classList.remove('active');
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            document.getElementById('themesModal').classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>

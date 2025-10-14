@@ -1,0 +1,66 @@
+{{> /include/header }}
+<div class="ui fluid container main-content">
+    <h2 class="ui dividing header">
+        <a href="/users/{{userId}}/portfolios/{{portfolioId}}" class="ui icon button primary inverted circular back-button" data-tooltip="Retour au portfolio" data-position="right center">
+            <i class="left arrow icon"></i>
+        </a>
+        <span style="margin-left: 10px;">{{#project}}Modifier le projet "{{project.title}}"{{/project}}{{^project}}Ajouter un nouveau projet{{/project}}</span>
+    </h2>
+
+    <form class="ui form segment" action="{{action}}" method="post">
+        <div class="field">
+            <label for="projectTitle">Titre du projet</label>
+            <input type="text" id="projectTitle" name="title" value="{{#project}}{{project.title}}{{/project}}" placeholder="Ex: Site E-commerce, Application mobile" required minlength="3" maxlength="100">
+        </div>
+
+        <div class="field">
+            <label for="projectDescription">Description</label>
+            <textarea id="projectDescription" name="description" rows="5" placeholder="Décrivez votre projet, vos objectifs, les défis rencontrés, etc.">{{#project}}{{project.description}}{{/project}}</textarea>
+        </div>
+
+        <div class="two fields">
+            <div class="field">
+                <label for="imageUrl">URL de l'image / Miniature</label>
+                <input type="url" id="imageUrl" name="imageUrl" value="{{#project}}{{project.imageUrl}}{{/project}}" placeholder="Ex: https://exemple.com/image.png">
+            </div>
+            <div class="field">
+                <label for="projectUrl">Lien du projet (URL)</label>
+                <input type="url" id="projectUrl" name="projectUrl" value="{{#project}}{{project.projectUrl}}{{/project}}" placeholder="Ex: https://github.com/mon-projet ou https://demo.mon-projet.com">
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="completionDate">Date de réalisation</label>
+            <input type="date" id="completionDate" name="completionDate" value="{{#project}}{{project.completionDate}}{{/project}}">
+        </div>
+
+        <div class="ui divider"></div>
+
+        <a href="/users/{{userId}}/portfolios/{{portfolioId}}" class="ui basic button">Annuler</a>
+        <button type="submit" class="ui green button">Valider</button>
+    </form>
+</div>
+
+<style>
+    .main-content {
+        padding-top: 20px !important;
+    }
+    .segment {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        border-radius: 8px !important;
+    }
+    .ui.dividing.header {
+        display: flex;
+        align-items: center;
+    }
+    .back-button {
+        margin-right: 15px;
+    }
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 1; /* Rends l'icône du calendrier visible */
+        cursor: pointer;
+    }
+</style>
+
+{{> /include/footer }}

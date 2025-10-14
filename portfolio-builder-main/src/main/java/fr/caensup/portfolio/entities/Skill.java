@@ -1,23 +1,19 @@
 package fr.caensup.portfolio.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
-@Getter @Setter
-public class Profile {
+public class Skill {
     @Id
-    private UUID id=UUID.randomUUID();
-
-    @Column(length = 60)
+    private UUID id = UUID.randomUUID();
     private String name;
+    private Integer level; // 0-100
+    private String category; // "Frontend", "Backend", etc.
 
     @ManyToOne
-    private User owner;
+    private Portfolio portfolio;
 }

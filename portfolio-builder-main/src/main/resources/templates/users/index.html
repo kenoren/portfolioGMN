@@ -26,28 +26,27 @@
             >
                 <i class="ui edit icon"></i>
             </a>
-            <!-- NOUVEAU : Bouton pour voir les profils de l'utilisateur -->
-            <a href="/users/{{id}}/profiles"
+            <!-- NOUVEAU : Bouton pour voir les portfolios de l'utilisateur -->
+            <a href="/users/{{id}}/portfolios"
                class="ui blue mini circular icon button"
-               title="Voir les profils"
+               title="Voir les portfolios"
             >
                 <i class="ui eye icon"></i>
             </a>
-            <!-- Le bouton de suppression avec la modale Semantic UI (inchangé) -->
             <button class="ui red circular mini icon button delete-user-button"
                     title="Supprimer"
                     data-user-id="{{id}}"
                     data-user-login="{{login}}"
                     data-user-fullname="{{firstName}} {{lastName}}"
-                    data-profiles-count="{{profiles.size}}"
+                    data-portfolios-count="{{portfolios.size}}" <!-- Changement ici -->
             >
-                <i class="ui remove icon"></i>
+            <i class="ui remove icon"></i>
             </button>
         </div>
         <div class="middle aligned content">
             <img class="ui avatar image" src="https://fomantic-ui.com/images/wireframe/square-image.png">
             {{firstName}} {{lastName}}
-            <div class="description">{{profiles.size}} profil(s) associé(s)</div>
+            <div class="description">{{portfolios.size}} portfolio(s) associé(s)</div> <!-- Changement ici -->
         </div>
     </div>
     {{/users}}
@@ -65,7 +64,7 @@
             <i class="trash alternate outline icon"></i>
             <span id="modalMessage">
                 Êtes-vous sûr de vouloir supprimer l'utilisateur <strong id="modalUserName"></strong>
-                (<strong id="modalUserLogin"></strong>) et ses <strong id="modalProfilesCount"></strong> profil(s) associé(s) ?
+                (<strong id="modalUserLogin"></strong>) et ses <strong id="modalPortfoliosCount"></strong> portfolio(s) associé(s) ? <!-- Changement ici -->
             </span>
         </div>
         <p>Cette action est irréversible.</p>
@@ -109,12 +108,12 @@
             var userId = $(this).data('user-id');
             var userLogin = $(this).data('user-login');
             var userName = $(this).data('user-fullname');
-            var profilesCount = $(this).data('profiles-count');
+            var portfoliosCount = $(this).data('portfolios-count'); // Changement ici
 
 
             $('#modalUserName').text(userName);
             $('#modalUserLogin').text(userLogin);
-            $('#modalProfilesCount').text(profilesCount);
+            $('#modalPortfoliosCount').text(portfoliosCount); // Changement ici
 
 
             var deleteUrl = '/users/delete/' + userId;

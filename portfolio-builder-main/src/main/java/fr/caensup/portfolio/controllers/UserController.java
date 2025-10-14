@@ -1,11 +1,11 @@
 package fr.caensup.portfolio.controllers;
 
-import fr.caensup.portfolio.dtos.ProfileDto;
+import fr.caensup.portfolio.dtos.PortfolioDto; // Changement
 import fr.caensup.portfolio.dtos.UserDto;
-import fr.caensup.portfolio.entities.Profile;
+import fr.caensup.portfolio.entities.Portfolio; // Changement
 import fr.caensup.portfolio.entities.User;
 import fr.caensup.portfolio.exceptions.UserNotFoundException;
-import fr.caensup.portfolio.repositories.ProfileRepository;
+import fr.caensup.portfolio.repositories.PortfolioRepository; // Changement
 import fr.caensup.portfolio.repositories.UserRepository;
 import fr.caensup.portfolio.ui.UiMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private ProfileRepository profileRepository;
+    private PortfolioRepository portfolioRepository; // Changement
 
     @RequestMapping(value = "", method = {
             RequestMethod.GET,
             RequestMethod.POST
     })
     public ModelAndView index() {
-        List<User> users = userRepository.findAllWithProfiles();
+        List<User> users = userRepository.findAllWithPortfolios(); // Changement
         return new ModelAndView("/users/index", "users", users);
     }
 
@@ -123,108 +123,108 @@ public class UserController {
         return new ModelAndView("/users/index", "users", users);
     }
 
-    @GetMapping("/{userId}/profiles")
-    public ModelAndView viewUserProfiles(@PathVariable UUID userId) throws UserNotFoundException {
-        Optional<User> optUser = userRepository.findByIdWithProfiles(userId);
+    @GetMapping("/{userId}/portfolios") // Changement
+    public ModelAndView viewUserPortfolios(@PathVariable UUID userId) throws UserNotFoundException { // Changement
+        Optional<User> optUser = userRepository.findByIdWithPortfolios(userId); // Changement
         if (optUser.isPresent()) {
             User user = optUser.get();
-            ModelAndView mv = new ModelAndView("/users/viewProfiles");
+            ModelAndView mv = new ModelAndView("/users/viewPortfolios"); // Changement du template
             mv.addObject("user", user);
-            mv.addObject("profileDto", new ProfileDto());
+            mv.addObject("portfolioDto", new PortfolioDto()); // Changement
             return mv;
         }
         throw new UserNotFoundException("Utilisateur d'id " + userId + " non trouvé !");
     }
 
-    @PostMapping("/{userId}/profiles/add")
-    public RedirectView addProfile(
-            @PathVariable UUID userId,
-            @ModelAttribute ProfileDto profileDto,
-            RedirectAttributes attrs
+    @PostMapping("/{userId}/portfolios/add") // Changement
+    public RedirectView addPortfolio( // Changement
+                                      @PathVariable UUID userId,
+                                      @ModelAttribute PortfolioDto portfolioDto, // Changement
+                                      RedirectAttributes attrs
     ) throws UserNotFoundException {
         Optional<User> optUser = userRepository.findById(userId);
         if (optUser.isPresent()) {
             User user = optUser.get();
-            Profile newProfile = new Profile();
-            profileDto.toEntity(newProfile);
-            newProfile.setOwner(user);
-            profileRepository.save(newProfile);
+            Portfolio newPortfolio = new Portfolio(); // Changement
+            portfolioDto.toEntity(newPortfolio);
+            newPortfolio.setOwner(user);
+            portfolioRepository.save(newPortfolio); // Changement
             attrs.addFlashAttribute("message",
-                    new UiMessage("Ajout de profil", "Le profil '" + newProfile.getName() + "' a été ajouté.", "success", "info circle")
+                    new UiMessage("Ajout de portfolio", "Le portfolio '" + newPortfolio.getName() + "' a été ajouté.", "success", "info circle") // Changement
             );
-            return new RedirectView("/users/" + userId + "/profiles");
+            return new RedirectView("/users/" + userId + "/portfolios"); // Changement
         }
-        throw new UserNotFoundException("Utilisateur d'id " + userId + " non trouvé pour ajouter un profil !");
+        throw new UserNotFoundException("Utilisateur d'id " + userId + " non trouvé pour ajouter un portfolio !"); // Changement
     }
 
-    @GetMapping("/{userId}/profiles/edit/{profileId}")
-    public ModelAndView editProfileForm(
-            @PathVariable UUID userId,
-            @PathVariable UUID profileId
+    @GetMapping("/{userId}/portfolios/edit/{portfolioId}") // Changement
+    public ModelAndView editPortfolioForm( // Changement
+                                           @PathVariable UUID userId,
+                                           @PathVariable UUID portfolioId // Changement
     ) throws UserNotFoundException {
-        Optional<Profile> optProfile = profileRepository.findById(profileId);
-        if (optProfile.isPresent()) {
-            Profile profile = optProfile.get();
-            if (!profile.getOwner().getId().equals(userId)) {
-                throw new UserNotFoundException("Le profil d'id " + profileId + " n'appartient pas à l'utilisateur " + userId);
+        Optional<Portfolio> optPortfolio = portfolioRepository.findById(portfolioId); // Changement
+        if (optPortfolio.isPresent()) {
+            Portfolio portfolio = optPortfolio.get(); // Changement
+            if (!portfolio.getOwner().getId().equals(userId)) { // Changement
+                throw new UserNotFoundException("Le portfolio d'id " + portfolioId + " n'appartient pas à l'utilisateur " + userId); // Changement
             }
-            ModelAndView mv = new ModelAndView("/users/profiles/profileForm");
-            mv.addObject("profile", profile);
-            mv.addObject("profileDto", new ProfileDto());
+            ModelAndView mv = new ModelAndView("/users/portfolios/portfolioForm"); // Changement du template
+            mv.addObject("portfolio", portfolio); // Changement
+            mv.addObject("portfolioDto", new PortfolioDto()); // Changement
             mv.addObject("userId", userId);
-            mv.addObject("action", "/users/" + userId + "/profiles/edit/" + profileId);
+            mv.addObject("action", "/users/" + userId + "/portfolios/edit/" + portfolioId); // Changement
             return mv;
         }
-        throw new UserNotFoundException("Profil d'id " + profileId + " non trouvé !");
+        throw new UserNotFoundException("Portfolio d'id " + portfolioId + " non trouvé !"); // Changement
     }
 
-    @PostMapping("/{userId}/profiles/edit/{profileId}")
-    public RedirectView submitEditProfile(
-            @PathVariable UUID userId,
-            @PathVariable UUID profileId,
-            @ModelAttribute ProfileDto profileDto,
-            RedirectAttributes attrs
+    @PostMapping("/{userId}/portfolios/edit/{portfolioId}") // Changement
+    public RedirectView submitEditPortfolio( // Changement
+                                             @PathVariable UUID userId,
+                                             @PathVariable UUID portfolioId, // Changement
+                                             @ModelAttribute PortfolioDto portfolioDto, // Changement
+                                             RedirectAttributes attrs
     ) throws UserNotFoundException {
-        Optional<Profile> optProfile = profileRepository.findById(profileId);
-        if (optProfile.isPresent()) {
-            Profile profileToUpdate = optProfile.get();
-            if (!profileToUpdate.getOwner().getId().equals(userId)) {
+        Optional<Portfolio> optPortfolio = portfolioRepository.findById(portfolioId); // Changement
+        if (optPortfolio.isPresent()) {
+            Portfolio portfolioToUpdate = optPortfolio.get(); // Changement
+            if (!portfolioToUpdate.getOwner().getId().equals(userId)) { // Changement
                 attrs.addFlashAttribute("message",
-                        new UiMessage("Erreur", "Le profil spécifié n'appartient pas à cet utilisateur.", "error", "times circle")
+                        new UiMessage("Erreur", "Le portfolio spécifié n'appartient pas à cet utilisateur.", "error", "times circle") // Changement
                 );
-                return new RedirectView("/users/" + userId + "/profiles");
+                return new RedirectView("/users/" + userId + "/portfolios"); // Changement
             }
-            profileDto.toEntity(profileToUpdate);
-            profileRepository.save(profileToUpdate);
+            portfolioDto.toEntity(portfolioToUpdate);
+            portfolioRepository.save(portfolioToUpdate); // Changement
             attrs.addFlashAttribute("message",
-                    new UiMessage("Modification de profil", "Le profil '" + profileToUpdate.getName() + "' a été modifié.", "success", "info circle")
+                    new UiMessage("Modification de portfolio", "Le portfolio '" + portfolioToUpdate.getName() + "' a été modifié.", "success", "info circle") // Changement
             );
-            return new RedirectView("/users/" + userId + "/profiles");
+            return new RedirectView("/users/" + userId + "/portfolios"); // Changement
         }
-        throw new UserNotFoundException("Profil d'id " + profileId + " non trouvé !");
+        throw new UserNotFoundException("Portfolio d'id " + portfolioId + " non trouvé !"); // Changement
     }
 
-    @GetMapping("/{userId}/profiles/delete/{profileId}")
-    public RedirectView deleteProfile(
-            @PathVariable UUID userId,
-            @PathVariable UUID profileId,
-            RedirectAttributes attrs
+    @GetMapping("/{userId}/portfolios/delete/{portfolioId}") // Changement
+    public RedirectView deletePortfolio( // Changement
+                                         @PathVariable UUID userId,
+                                         @PathVariable UUID portfolioId, // Changement
+                                         RedirectAttributes attrs
     ) throws UserNotFoundException {
-        Optional<Profile> optProfile = profileRepository.findById(profileId);
-        if (optProfile.isPresent()) {
-            Profile profileToDelete = optProfile.get();
-            if (!profileToDelete.getOwner().getId().equals(userId)) {
+        Optional<Portfolio> optPortfolio = portfolioRepository.findById(portfolioId); // Changement
+        if (optPortfolio.isPresent()) {
+            Portfolio portfolioToDelete = optPortfolio.get(); // Changement
+            if (!portfolioToDelete.getOwner().getId().equals(userId)) { // Changement
                 attrs.addFlashAttribute("message",
-                        new UiMessage("Erreur", "Le profil spécifié n'appartient pas à cet utilisateur.", "error", "times circle")
+                        new UiMessage("Erreur", "Le portfolio spécifié n'appartient pas à cet utilisateur.", "error", "times circle") // Changement
                 );
-                return new RedirectView("/users/" + userId + "/profiles");
+                return new RedirectView("/users/" + userId + "/portfolios"); // Changement
             }
-            profileRepository.delete(profileToDelete);
+            portfolioRepository.delete(portfolioToDelete); // Changement
             attrs.addFlashAttribute("message",
-                    new UiMessage("Suppression de profil", "Le profil '" + profileToDelete.getName() + "' a été supprimé.", "success", "info circle")
+                    new UiMessage("Suppression de portfolio", "Le portfolio '" + portfolioToDelete.getName() + "' a été supprimé.", "success", "info circle") // Changement
             );
-            return new RedirectView("/users/" + userId + "/profiles");
+            return new RedirectView("/users/" + userId + "/portfolios"); // Changement
         }
-        throw new UserNotFoundException("Profil d'id " + profileId + " non trouvé !");
+        throw new UserNotFoundException("Portfolio d'id " + portfolioId + " non trouvé !"); // Changement
     }
 }

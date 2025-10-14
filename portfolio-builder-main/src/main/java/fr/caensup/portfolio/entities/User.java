@@ -10,6 +10,16 @@ import java.util.*;
 @Getter
 @Setter
 public class User {
+
+    private String bio;
+    private String jobTitle;
+    private String profileImageUrl;
+    private String email;
+    private String phone;
+    private String linkedinUrl;
+    private String githubUrl;
+    private String location;
+
     @Id
     private UUID id=UUID.randomUUID();
 
@@ -23,6 +33,6 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Profile> profiles = new ArrayList<>();
+    private List<Portfolio> portfolios = new ArrayList<>();
 
 }

@@ -1,0 +1,397 @@
+{{> /include/header }}
+
+<div class="ui fluid container main-content">
+    <div class="ui clearing segment top-bar">
+        <h1 class="ui huge header floated left">
+            <a href="/users" class="ui icon button primary inverted circular back-button" data-tooltip="Retour aux utilisateurs" data-position="right center">
+                <i class="left arrow icon"></i>
+            </a>
+            <span class="page-title">Portfolios de: <span class="ui text teal">{{user.firstName}} {{user.lastName}}</span> ({{user.login}})</span>
+        </h1>
+        <button id="addPortfolioButton" class="ui right floated primary button add-portfolio-button" data-tooltip="Ajouter un nouveau portfolio" data-position="left center">
+            <i class="plus icon"></i> Ajouter un portfolio
+        </button>
+    </div>
+
+    <div class="ui grid stackable portfolio-management-grid">
+        <!-- Colonne principale pour la liste des portfolios -->
+        <div class="eleven wide column portfolio-list-section">
+            <h2 class="ui dividing header section-header">
+                <i class="folder open outline icon"></i> Liste des portfolios
+            </h2>
+
+            {{#user.portfolios.size}}
+            <div class="ui two doubling cards portfolio-cards-container">
+                {{#user.portfolios}}
+                <div class="card portfolio-card" data-portfolio-id="{{id}}" data-portfolio-name="{{name}}">
+                    <div class="content">
+                        <div class="header portfolio-name">{{name}}</div>
+                        <div class="meta portfolio-meta">ID: {{id}}</div>
+                        <div class="description">
+                            {{projects.size}} projet(s)
+                        </div>
+                    </div>
+                    <div class="extra content portfolio-actions">
+                        <div class="ui three buttons">
+                            <a href="/users/{{owner.id}}/portfolios/{{id}}/projects/add"
+                               class="ui basic blue button add-project-btn" data-tooltip="Ajouter un projet">
+                                <i class="plus icon"></i> Projet
+                            </a>
+                            <button class="ui basic green button edit-portfolio-btn" data-tooltip="Modifier ce portfolio">
+                                <i class="edit icon"></i> Modifier
+                            </button>
+                            <button class="ui basic red button delete-portfolio-btn" data-tooltip="Supprimer ce portfolio">
+                                <i class="trash alternate icon"></i> Supprimer
+                            </button>
+                        </div>
+                        <div class="ui horizontal divider">Projets</div>
+                        <div class="ui divided relaxed list project-quick-list">
+                            {{#projects}}
+                            <div class="item">
+                                <div class="content">
+                                    <a class="header" href="/users/{{owner.id}}/portfolios/{{id}}/projects/edit/{{id}}">{{title}}</a>
+                                    <div class="description">Date: {{completionDate}}</div>
+                                </div>
+                            </div>
+                            {{/projects}}
+                            {{^projects}}
+                            <div class="item disabled">
+                                Aucun projet pour l'instant.
+                            </div>
+                            {{/projects}}
+                        </div>
+                    </div>
+                </div>
+                {{/user.portfolios}}
+            </div>
+            {{/user.portfolios.size}}
+            {{^user.portfolios.size}}
+            <div class="ui placeholder segment no-portfolios-placeholder">
+                <div class="ui icon header">
+                    <i class="address book outline icon"></i>
+                    Aucun portfolio n'est associé à cet utilisateur pour le moment.
+                </div>
+                <p>Cliquez sur "Ajouter un portfolio" pour commencer.</p>
+                <div class="ui primary button" id="triggerAddPortfolioForm">
+                    <i class="plus icon"></i> Ajouter un premier portfolio
+                </div>
+            </div>
+            {{/user.portfolios.size}}
+        </div>
+
+        <!-- Colonne pour le formulaire d'ajout/édition de portfolio (initialement caché) -->
+        <div class="five wide column portfolio-form-section" id="portfolioFormContainer" style="display: none;">
+            <h2 class="ui dividing header section-header">
+                <i class="plus circle icon"></i> <span id="formTitle">Ajouter un portfolio</span>
+                <i class="close icon floated right close-form-btn" style="cursor: pointer;"></i>
+            </h2>
+            <form class="ui form segment portfolio-form" id="portfolioForm" action="/users/{{user.id}}/portfolios/add" method="post">
+                <input type="hidden" name="portfolioId" id="portfolioIdField">
+                <div class="field">
+                    <label for="portfolioName"><i class="tag icon"></i> Nom du portfolio</label>
+                    <input type="text" id="portfolioName" name="name" placeholder="Ex: Mon portfolio principal, Projets web" required minlength="3" maxlength="50">
+                </div>
+                <button class="ui primary button fluid submit-portfolio-btn" type="submit">
+                    <i class="save icon"></i> <span id="submitButtonText">Enregistrer le portfolio</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{#message}}
+<div id="msg" class="ui icon message {{className}} animated fadeIn toast fixed bottom right">
+    <i class="{{icon}} icon"></i>
+    <div class="content">
+        <div class="header">{{title}}</div>
+        <p>{{content}}</p>
+    </div>
+    <i class="close icon"></i>
+</div>
+{{/message}}
+
+{{> /include/footer }}
+
+<style>
+    body {
+        background-color: #f0f2f5;
+    }
+    .main-content {
+        padding: 30px 40px !important;
+    }
+    .top-bar {
+        background: #ffffff;
+        padding: 25px !important;
+        margin-bottom: 30px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .top-bar .page-title {
+        margin-left: 15px;
+    }
+    .back-button {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .add-portfolio-button {
+        font-size: 1.1em !important;
+        padding: 12px 25px !important;
+        border-radius: 25px !important;
+        transition: all 0.3s ease;
+    }
+    .add-portfolio-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .portfolio-management-grid {
+        margin-top: 20px !important;
+    }
+    .section-header {
+        margin-bottom: 25px !important;
+        padding-bottom: 15px !important;
+        border-color: #e0e0e0 !important;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .portfolio-cards-container {
+        margin-top: 20px;
+    }
+    .portfolio-card {
+        border-radius: 10px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        display: flex !important; /* Utiliser flexbox pour le layout interne */
+        flex-direction: column;
+    }
+    .portfolio-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+    .portfolio-card .content {
+        flex-grow: 1; /* Permet au contenu de prendre l'espace disponible */
+    }
+    .portfolio-card .header {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #333;
+    }
+    .portfolio-card .meta {
+        color: #777;
+        font-size: 0.9em;
+    }
+    .portfolio-actions {
+        border-top: 1px solid rgba(0,0,0,0.05) !important;
+        padding-top: 15px !important;
+        margin-top: auto; /* Pousse les actions vers le bas de la carte */
+    }
+    .portfolio-actions .button {
+        border-radius: 5px !important;
+        font-weight: 600;
+    }
+
+    .project-quick-list {
+        max-height: 150px; /* Limite la hauteur de la liste des projets */
+        overflow-y: auto; /* Ajoute un scroll si trop de projets */
+        margin-top: 10px !important;
+        padding-right: 5px; /* Pour éviter que le scrollbar ne masque le texte */
+    }
+    .project-quick-list .item .header {
+        font-size: 1em;
+        color: #2185d0; /* Couleur primaire pour les liens de projets */
+    }
+    .project-quick-list .item .description {
+        font-size: 0.85em;
+        color: #999;
+    }
+
+    .no-portfolios-placeholder {
+        padding: 40px !important;
+        border-radius: 10px !important;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+    .no-portfolios-placeholder .header {
+        color: #555;
+        font-size: 1.4em;
+    }
+    .no-portfolios-placeholder p {
+        color: #777;
+        font-size: 1.1em;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .no-portfolios-placeholder .button {
+        border-radius: 20px;
+        padding: 12px 25px;
+    }
+
+    .portfolio-form-section {
+        background: #ffffff;
+        padding: 30px !important;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        position: sticky;
+        top: 30px;
+        align-self: flex-start;
+    }
+    .portfolio-form .field label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+    }
+    .portfolio-form input[type="text"],
+    .portfolio-form textarea {
+        border-radius: 5px !important;
+        border: 1px solid #ddd !important;
+        padding: 12px !important;
+        transition: border-color 0.2s ease;
+    }
+    .portfolio-form input[type="text"]:focus,
+    .portfolio-form textarea:focus {
+        border-color: #2185d0 !important;
+    }
+    .submit-portfolio-btn {
+        margin-top: 25px !important;
+        border-radius: 5px !important;
+        font-size: 1.1em !important;
+        padding: 12px 25px !important;
+    }
+    .close-form-btn {
+        font-size: 1.2em;
+        color: #999;
+        transition: color 0.2s ease;
+    }
+    .close-form-btn:hover {
+        color: #333;
+    }
+
+    .toast.message {
+        animation-duration: 0.5s !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        max-width: 350px;
+        border-radius: 8px !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // Initialize tooltips
+        $('.ui.button').popup();
+        $('.back-button').popup();
+        $('#addPortfolioButton').popup();
+        $('.add-project-btn').popup(); // Nouveau tooltip pour ajouter projet
+
+        const portfolioFormContainer = $('#portfolioFormContainer');
+        const portfolioForm = $('#portfolioForm');
+        const formTitle = $('#formTitle');
+        const submitButtonText = $('#submitButtonText');
+        const portfolioIdField = $('#portfolioIdField');
+        const portfolioNameInput = $('#portfolioName');
+        // const portfolioDescriptionInput = $('#portfolioDescription'); // Si tu ajoutes une description à Portfolio
+
+        // Function to show the add/edit portfolio form
+        function showPortfolioForm(isEdit = false, portfolioData = {}) {
+            portfolioFormContainer.fadeIn(300);
+            $('html, body').animate({
+                scrollTop: portfolioFormContainer.offset().top - 50
+            }, 500);
+
+            if (isEdit) {
+                formTitle.text('Modifier le portfolio');
+                submitButtonText.text('Enregistrer les modifications');
+                portfolioForm.attr('action', `/users/{{user.id}}/portfolios/edit/${portfolioData.id}`);
+                portfolioIdField.val(portfolioData.id);
+                portfolioNameInput.val(portfolioData.name);
+                // portfolioDescriptionInput.val(portfolioData.description || '');
+            } else {
+                formTitle.text('Ajouter un portfolio');
+                submitButtonText.text('Ajouter le portfolio');
+                portfolioForm.attr('action', `/users/{{user.id}}/portfolios/add`);
+                portfolioIdField.val('');
+                portfolioNameInput.val('');
+                // portfolioDescriptionInput.val('');
+            }
+        }
+
+        // Click handler for "Add Portfolio" button in top bar and placeholder
+        $('#addPortfolioButton, #triggerAddPortfolioForm').on('click', function() {
+            showPortfolioForm(false);
+        });
+
+        // Click handler for "Edit" buttons on portfolio cards
+        $('.edit-portfolio-btn').on('click', function() {
+            const card = $(this).closest('.portfolio-card');
+            const portfolioData = {
+                id: card.data('portfolio-id'),
+                name: card.data('portfolio-name')
+            };
+            showPortfolioForm(true, portfolioData);
+        });
+
+        // Click handler for closing the form
+        $('.close-form-btn').on('click', function() {
+            portfolioFormContainer.fadeOut(300);
+        });
+
+        // Click handler for "Delete" buttons on portfolio cards
+        $('.delete-portfolio-btn').on('click', function() {
+            const card = $(this).closest('.portfolio-card');
+            const portfolioId = card.data('portfolio-id');
+            const portfolioName = card.data('portfolio-name');
+
+            $('body')
+                .toast({
+                    class: 'red',
+                    message: `Voulez-vous vraiment supprimer le portfolio '${portfolioName}' et tous ses projets ?`,
+                    displayTime: 0,
+                    closeIcon: true,
+                    actions: [
+                        {
+                            text: 'Oui, supprimer',
+                            icon: 'trash',
+                            class: 'red button',
+                            click: function() {
+                                window.location.href = `/users/{{user.id}}/portfolios/delete/${portfolioId}`;
+                            }
+                        },
+                        {
+                            text: 'Annuler',
+                            class: 'basic button'
+                        }
+                    ]
+                })
+            ;
+        });
+
+        // Toast message initialization (for the #msg element)
+        {{#message}}
+        $(document).ready(function() {
+            const messageToast = $('#msg');
+            messageToast.transition('pulse');
+
+            setTimeout(function() {
+                if (messageToast.is(':visible')) {
+                    messageToast.transition('fade');
+                }
+            }, 5000);
+
+            $('.message .close')
+                .on('click', function() {
+                    $(this)
+                        .closest('.message')
+                        .transition('fade')
+                    ;
+                })
+            ;
+        });
+        {{/message}}
+        });
+</script>
