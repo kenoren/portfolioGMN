@@ -1,0 +1,31 @@
+{{> /include/header }}
+<h1>Ajouter un profil complet</h1>
+
+<form action="{{action}}" method="post">
+
+    <h2>Utilisateur</h2>
+    <input type="text" name="user.name" placeholder="Nom">
+    <input type="email" name="user.email" placeholder="Email">
+
+    <h2>Éducation</h2>
+    <input type="text" name="education.degree" placeholder="Diplôme">
+    <input type="text" name="education.school" placeholder="École">
+
+    <h2>Expérience</h2>
+    <input type="text" name="experience.title" placeholder="Poste">
+    <input type="text" name="experience.company" placeholder="Entreprise">
+
+    <h2>Compétence</h2>
+    <input type="text" name="skill.name" placeholder="Nom de la compétence">
+    <input type="text" name="skill.level" placeholder="Niveau">
+
+    <h2>Projet</h2>
+    <input type="text" name="project.title" placeholder="Titre du projet">
+    <input type="text" name="project.description" placeholder="Description">
+
+    <h2>Portfolio</h2>
+    <input type="text" name="portfolio.title" placeholder="Titre du portfolio">
+
+    <button type="submit">Enregistrer</button>
+</form>
+{{> /include/footer }}

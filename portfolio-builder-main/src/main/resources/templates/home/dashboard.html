@@ -560,93 +560,33 @@
             <h2 class="section-title">My Projects</h2>
             <div class="section-actions">
                 <button class="action-btn">
+                    <i class="add icon"></i>
+                </button>
+                <button class="action-btn">
                     <i class="edit icon"></i>
                     Edit
                 </button>
                 <button class="action-btn">
-                    <i class="copy icon"></i>
-                    Duplicate
-                </button>
-                <button class="action-btn">
                     <i class="trash icon"></i>
                 </button>
-                <button class="action-btn">
-                    <i class="arrows alternate icon"></i>
-                    Rearrange
-                </button>
             </div>
         </div>
 
-        <!-- Projects Grid -->
+        <a href="/dashboard/add">➕ Ajouter un profil</a>
+
         <div class="projects-grid">
-            <!-- Project Card 1 -->
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <i class="project-icon bullseye icon"></i>
-                </div>
+            {{#portfolios}}
+            <div class="project-card" onclick="window.location='/portfolio/{{id}}'">
                 <div class="project-content">
-                    <h3 class="project-title">Project Bloom</h3>
-                    <p class="project-description">Praesent eius nonummy maiestatis delectus eostineque costraeos.</p>
-                    <div class="project-footer">
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Figma</span>
-                            <span class="project-tag">TypeScript</span>
-                        </div>
-                    </div>
+                    <h3 class="project-title">{{title}}</h3>
+                    <p class="project-description">
+                        {{#projects}}{{description}}{{/projects}}
+                    </p>
                 </div>
             </div>
-
-            <!-- Project Card 2 -->
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <i class="project-icon mobile alternate icon"></i>
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">TaskMaster Pro</h3>
-                    <p class="project-description">Praesent eius ronummy magistratis nedi essent possuere.</p>
-                    <div class="project-footer">
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Figma</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project Card 3 -->
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                    <i class="project-icon chart line icon"></i>
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">Analytics Dashboard</h3>
-                    <p class="project-description">Agospine tol ad simillo saprofee deneti corsaots.</p>
-                    <div class="project-footer">
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Figma</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project Card 4 -->
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="project-icon shopping bag icon"></i>
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">Crepmi Pro</h3>
-                    <p class="project-description">Pedoti praslac os vostino consaron.</p>
-                    <div class="project-footer">
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{/portfolios}}
         </div>
+
     </main>
 </div>
 

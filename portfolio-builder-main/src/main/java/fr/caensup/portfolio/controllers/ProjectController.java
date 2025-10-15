@@ -8,6 +8,7 @@ import fr.caensup.portfolio.exceptions.ProjectNotFoundException; // Nous devrons
 import fr.caensup.portfolio.repositories.PortfolioRepository;
 import fr.caensup.portfolio.repositories.ProjectRepository;
 import fr.caensup.portfolio.ui.UiMessage;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

@@ -1,5 +1,6 @@
 package fr.caensup.portfolio.controllers;
 
+import org.springframework.ui.Model;
 import fr.caensup.portfolio.entities.Portfolio;
 import fr.caensup.portfolio.exceptions.PortfolioNotFoundException;
 import fr.caensup.portfolio.repositories.PortfolioRepository;
@@ -33,6 +34,15 @@ public class PortfolioPublicController {
         }
         throw new PortfolioNotFoundException("Le portfolio demandé n'existe pas ou n'est pas public.");
     }
+
+    @GetMapping("/portfolio/{id}")
+    public String viewPortfolio(@PathVariable Long id, Model model, PortfolioRepository portfolioRepo) {
+        Portfolio portfolio = portfolioRepo.findById(id)
+                .orElseThrow(() -> new PortfolioNotFoundException(id));
+        model.addAttribute("portfolio", portfolio);
+        return "users/portfolio";
+    }
+
 
     // Tu peux ajouter d'autres mappings ici si ton portfolio public a plusieurs pages
     // Par exemple: /view/{portfolioId}/about, /view/{portfolioId}/contact

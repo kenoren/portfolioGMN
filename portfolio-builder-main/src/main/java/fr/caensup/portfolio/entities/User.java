@@ -1,14 +1,14 @@
 package fr.caensup.portfolio.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 import java.util.*;
 
+@Data
 @Entity
-@Getter
-@Setter
 public class User {
 
     private String bio;

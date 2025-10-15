@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface PortfolioRepository extends JpaRepository<Portfolio, UUID> {
     @Query("SELECT p FROM Portfolio p LEFT JOIN FETCH p.projects WHERE p.id = :id")
     Optional<Portfolio> findByIdWithProjects(@Param("id") UUID id);
+
+    Optional<Object> findById(Long id);
 }
