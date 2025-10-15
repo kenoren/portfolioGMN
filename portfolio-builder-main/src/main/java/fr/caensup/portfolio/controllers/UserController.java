@@ -35,14 +35,14 @@ public class UserController {
     })
     public ModelAndView index() {
         List<User> users = userRepository.findAllWithPortfolios(); // Changement
-        return new ModelAndView("/users/index", "users", users);
+        return new ModelAndView("portfolio", "users", users);
     }
 
     @GetMapping("/{id}")
     public ModelAndView getOne(@PathVariable UUID id) {
         Optional<User> opt = userRepository.findById(id);
         if (opt.isPresent()) {
-            return new ModelAndView("/users/index", "user", opt.get());
+            return new ModelAndView("portfolio", "user", opt.get());
         }
         return null;
     }
@@ -120,7 +120,7 @@ public class UserController {
     @PostMapping("/search")
     public ModelAndView search(@RequestParam String searchText) {
         List<User> users = userRepository.search("%" + searchText.toLowerCase() + "%");
-        return new ModelAndView("/users/index", "users", users);
+        return new ModelAndView("portfolio", "users", users);
     }
 
     @GetMapping("/{userId}/portfolios") // Changement

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/portfolio-builder-main/portfolio.iml" filepath="$PROJECT_DIR$/portfolio-builder-main/portfolio.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/portfolioGMN.iml" filepath="$PROJECT_DIR$/.idea/portfolioGMN.iml" />
     </modules>
   </component>
