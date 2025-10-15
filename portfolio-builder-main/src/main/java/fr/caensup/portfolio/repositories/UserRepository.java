@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.portfolios") // Re-vérifiée, cette requête est standard et devrait fonctionner
     List<User> findAllWithPortfolios();
 
-    User findByLogin(String login);
+    Optional<User> findByLogin(String login);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.portfolios p LEFT JOIN FETCH p.projects WHERE u.id = :id")
     Optional<User> findByIdWithPortfolios(@Param("id") UUID id);
@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             or lower(pr.title) like :search
     """)
     List<User> search(@Param("search") String search);
+
+
 }

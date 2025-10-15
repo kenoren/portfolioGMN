@@ -10,6 +10,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Table(name = "projects") // <--- AJOUTE OU MODIFIE CETTE LIGNE
 public class Project {
     @Id
     private UUID id = UUID.randomUUID();
@@ -17,7 +18,7 @@ public class Project {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(columnDefinition = "CLOB") // CHANGEMENT ICI : TEXT remplacé par CLOB
+    @Column(columnDefinition = "CLOB")
     private String description;
 
     @Column(length = 255)

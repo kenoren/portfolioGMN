@@ -1,6 +1,5 @@
 package fr.caensup.portfolio.controllers;
 
-
 import fr.caensup.portfolio.entities.User;
 import fr.caensup.portfolio.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +16,8 @@ public class HomeController {
     private UserRepository userRepository;
 
     @GetMapping("/")
-    public ModelAndView home() {
-        // TODO: Récupérer l'utilisateur connecté depuis la session
-        // Pour l'instant, on prend le premier utilisateur ou on crée une vue vide
-
-        ModelAndView mv = new ModelAndView("/home/dashboard");
-
-        // Exemple: récupérer le premier utilisateur (à remplacer par l'utilisateur connecté)
-        // User currentUser = userRepository.findAll().stream().findFirst().orElse(null);
-        // mv.addObject("currentUser", currentUser);
-
-        return mv;
+    public String landing() {
+        return "landing"; // Cherche landing.html dans templates/
     }
 
     @GetMapping("/dashboard")

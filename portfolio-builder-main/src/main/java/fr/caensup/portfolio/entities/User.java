@@ -9,6 +9,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@Table(name = "users") // C'est une bonne pratique de spécifier explicitement le nom de la table
 public class User {
 
     private String bio;
@@ -21,10 +22,13 @@ public class User {
     private String location;
 
     @Id
-    private UUID id=UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
-    @Column(length = 20)
+    @Column(length = 20, unique = true, nullable = false) // Ajout de unique et nullable pour login
     private String login;
+
+    @Column(length = 255, nullable = false) // Ajoutez le champ password ici. La longueur 255 est standard pour les mots de passe hachés.
+    private String password;
 
     @Column(length = 20)
     private String firstName;
@@ -32,7 +36,9 @@ public class User {
     @Column(length = 35)
     private String lastName;
 
-    @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Portfolio> portfolios = new ArrayList<>();
 
+    // Ajoutez un constructeur par défaut si nécessaire, Lombok ne le génère pas toujours si d'autres constructeurs sont présents
+    public User() {}
 }

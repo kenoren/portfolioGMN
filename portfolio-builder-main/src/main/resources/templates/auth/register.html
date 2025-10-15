@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - PortfolioBuilder</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2.25rem;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-subtitle {
+            color: #718096;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #a0aec0;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #718096;
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #718096;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 0.875rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .password-requirements {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 2rem;
+            }
+
+            .auth-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="logo-section">
+            <a href="/" class="logo">
+                <i class="folder open icon"></i>
+                PortfolioBuilder
+            </a>
+        </div>
+
+        <h1 class="auth-title">Créer un compte</h1>
+        <p class="auth-subtitle">Commencez à créer votre portfolio professionnel</p>
+
+        <!-- Message d'erreur (à afficher si nécessaire) -->
+        <!-- <div class="error-message">
+            <i class="exclamation circle icon"></i>
+            Cette adresse email est déjà utilisée.
+        </div> -->
+
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="firstName">Prénom</label>
+                <input type="text" id="firstName" name="firstName" class="form-input"
+                       placeholder="Jean" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="lastName">Nom</label>
+                <input type="text" id="lastName" name="lastName" class="form-input"
+                       placeholder="Dupont" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-input"
+                       placeholder="jean.dupont@exemple.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="login">Nom d'utilisateur</label>
+                <input type="text" id="login" name="login" class="form-input"
+                       placeholder="jeandupont" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       placeholder="••••••••" required minlength="8">
+                <div class="password-requirements">
+                    Minimum 8 caractères
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirmer le mot de passe</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                       placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="user plus icon"></i>
+                Créer mon compte
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Vous avez déjà un compte ?
+            <a href="/login">Se connecter</a>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a href="/">
+            <i class="arrow left icon"></i>
+            Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.js"></script>
+<script>
+    // Validation du formulaire
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Les mots de passe ne correspondent pas.');
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

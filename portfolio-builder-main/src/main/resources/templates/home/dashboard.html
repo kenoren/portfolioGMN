@@ -494,8 +494,18 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="user-profile">
-                <div class="user-avatar">JD</div>
-                <div class="user-name">Jane Doe</div>
+                <div class="user-avatar">
+                    {{#currentUser}}
+                    {{#firstName}}{{#lastName}}
+                    {{firstName.0}}{{lastName.0}}
+                    {{/lastName}}{{/firstName}}
+                    {{/currentUser}}
+                </div>
+                <div class="user-name">
+                    {{#currentUser}}
+                    {{firstName}} {{lastName}}
+                    {{/currentUser}}
+                </div>
             </div>
         </div>
 

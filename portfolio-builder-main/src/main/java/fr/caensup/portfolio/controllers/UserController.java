@@ -8,6 +8,7 @@ import fr.caensup.portfolio.exceptions.UserNotFoundException;
 import fr.caensup.portfolio.repositories.PortfolioRepository; // Changement
 import fr.caensup.portfolio.repositories.UserRepository;
 import fr.caensup.portfolio.ui.UiMessage;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,26 @@ public class UserController {
     public ModelAndView index() {
         List<User> users = userRepository.findAllWithPortfolios(); // Changement
         return new ModelAndView("portfolio", "users", users);
+    }
+
+    @GetMapping("/{userId}/portfolios")
+    public ModelAndView viewUserPortfolios(
+            @PathVariable UUID userId,
+            HttpSession session
+    ) throws UserNotFoundException {
+        // Récupérer l'utilisateur de la session
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        Optional<User> optUser = userRepository.findByIdWithPortfolios(userId);
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            ModelAndView mv = new ModelAndView("/users/viewPortfolios");
+            mv.addObject("user", user);
+            mv.addObject("currentUser", currentUser); // Pour l'afficher dans la vue
+            mv.addObject("portfolioDto", new PortfolioDto());
+            return mv;
+        }
+        throw new UserNotFoundException("Utilisateur d'id " + userId + " non trouvé !");
     }
 
     @GetMapping("/{id}")
@@ -123,7 +144,7 @@ public class UserController {
         return new ModelAndView("portfolio", "users", users);
     }
 
-    @GetMapping("/{userId}/portfolios") // Changement
+   /* @GetMapping("/{userId}/portfolios") // Changement
     public ModelAndView viewUserPortfolios(@PathVariable UUID userId) throws UserNotFoundException { // Changement
         Optional<User> optUser = userRepository.findByIdWithPortfolios(userId); // Changement
         if (optUser.isPresent()) {
@@ -134,7 +155,7 @@ public class UserController {
             return mv;
         }
         throw new UserNotFoundException("Utilisateur d'id " + userId + " non trouvé !");
-    }
+    }*/
 
     @PostMapping("/{userId}/portfolios/add") // Changement
     public RedirectView addPortfolio( // Changement

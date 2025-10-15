@@ -8,6 +8,7 @@ import java.util.*;
 
 @Entity
 @Getter @Setter
+@Table(name = "portfolios")
 public class Portfolio {
     @Id
     private UUID id = UUID.randomUUID();
