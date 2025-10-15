@@ -16,22 +16,24 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/")
+
     public ModelAndView home() {
         // TODO: Récupérer l'utilisateur connecté depuis la session
         // Pour l'instant, on prend le premier utilisateur ou on crée une vue vide
 
-        ModelAndView mv = new ModelAndView("/home/dashboard");
 
-        // Exemple: récupérer le premier utilisateur (à remplacer par l'utilisateur connecté)
-        // User currentUser = userRepository.findAll().stream().findFirst().orElse(null);
-        // mv.addObject("currentUser", currentUser);
-
-        return mv;
+        return null;
     }
 
     @GetMapping("/dashboard")
     public ModelAndView dashboard() {
         return new ModelAndView("/home/dashboard");
     }
+
+
+    @GetMapping("/sauvegardeportfolio")
+    public ModelAndView sauvegardeportfolio() {
+        return new ModelAndView("/users/sauvegardeportfolio") ; // correspond au fichier sauvegardeportfolio.html
+    }
+
 }

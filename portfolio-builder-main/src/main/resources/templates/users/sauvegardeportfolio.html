@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -508,7 +508,7 @@
                 <i class="home icon"></i>
                 Dashboard
             </a>
-            <a th:href="@{/sauvegardeportfolio}" class="menu-item active">
+            <a href="about:blank" targer="_blank" class="menu-item active">
                 <i class="folder open icon"></i>
                 My Portfolio
             </a>
@@ -536,40 +536,66 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="section-header">
-            <h2 class="section-title">New Project</h2>
-        </div>
-        <div class="project-grid">
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="project-icon plus icon"></i>
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">Create Portfolio</h3>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-subtitle">Jane Doe</div>
+                <h1 class="hero-title">Innovative Digital<br>Experiences</h1>
+                <p class="hero-description">UI/UX Designer & Frontend Developer</p>
 
+                <div class="hero-nav">
+                    <button class="hero-nav-item active">Home</button>
+                    <button class="hero-nav-item">About</button>
+                    <button class="hero-nav-item">Projects</button>
+                    <button class="hero-nav-item">Contact</button>
                 </div>
             </div>
-            <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe 100%);">
-                    <i class="project-icon plus icon"></i>
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">Create CV</h3>
-
-                </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop" alt="Profile">
             </div>
         </div>
 
         <!-- Projects Section -->
         <div class="section-header">
             <h2 class="section-title">My Projects</h2>
-
+            <div class="section-actions">
+                <button class="action-btn">
+                    <i class="edit icon"></i>
+                    Edit
+                </button>
+                <button class="action-btn">
+                    <i class="copy icon"></i>
+                    Duplicate
+                </button>
+                <button class="action-btn">
+                    <i class="trash icon"></i>
+                </button>
+                <button class="action-btn">
+                    <i class="arrows alternate icon"></i>
+                    Rearrange
+                </button>
+            </div>
         </div>
 
         <!-- Projects Grid -->
         <div class="projects-grid">
             <!-- Project Card 1 -->
-
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="project-icon bullseye icon"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Project Bloom</h3>
+                    <p class="project-description">Praesent eius nonummy maiestatis delectus eostineque costraeos.</p>
+                    <div class="project-footer">
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Figma</span>
+                            <span class="project-tag">TypeScript</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Project Card 2 -->
             <div class="project-card">
